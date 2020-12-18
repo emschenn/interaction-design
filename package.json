@@ -1,0 +1,23 @@
+{
+  "name": "audio-visualization",
+  "version": "1.0.0",
+  "description": "final project of interaction design",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "author": "  ",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^3.2.0",
+    "express": "^4.17.1",
+    "googleapis": "^39.2.0",
+    "html2canvas": "^1.0.0-rc.7",
+    "multer": "^1.4.2",
+    "mz": "^2.7.0",
+    "python-shell": "^2.0.3",
+    "webpack": "^5.9.0",
+    "webpack-cli": "^4.2.0"
+  }
+}

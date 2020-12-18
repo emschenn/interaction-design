@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Audio Visualization</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+    />
+
+    <link rel="stylesheet" href="./style/style.css" />
+
+    <!-- p5 -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/p5@1.1.9/lib/p5.js"
+      type="text/javascript"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/p5@1.1.9/lib/addons/p5.sound.min.js"
+      type="text/javascript"
+    ></script>
+    <!-- ml5 -->
+    <script src="https://unpkg.com/ml5@0.4.3/dist/ml5.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.7/dist/html2canvas.min.js"></script>
+  </head>
+
+  <body>
+    <div class="ui container">
+      <div class="ui two column very relaxed grid">
+        <div class="column" style="top: 100px">
+          <div class="row" style="margin-top: 10px">
+            <button class="ui grey button" id="recordButton">Record</button>
+            <button class="ui grey button" id="stopButton">Stop</button>
+          </div>
+          <div class="row" style="margin-top: 10px">
+            <button class="ui grey button" id="randomButton">
+              Record randomly
+            </button>
+          </div>
+
+          <div class="row" style="margin-top: 120px">
+            <div id="recordingsList"></div>
+          </div>
+          <div class="row" style="margin-top: 20px">
+            <button class="ui grey button" id="saveButton">Save</button>
+            <button class="ui grey button" id="printButton">
+              I want to print
+            </button>
+          </div>
+          <div class="row" style="margin-top: 20px">
+            <button class="ui grey button" id="restartButton">Restart</button>
+          </div>
+        </div>
+        <div class="column">
+          <div id="canva">
+            <div id="p5"></div>
+            <div id="date"></div>
+
+            <div id="qrcode"></div>
+          </div>
+        </div>
+      </div>
+      <div class="ui modal" id="modal">
+        <i class="close icon"></i>
+        <div class="header">我要列印</div>
+        <div class="image content">
+          <div class="image"></div>
+          <div class="description">1. 右鍵另存圖片至???<br />2. 跟我們說</div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"
+      integrity="sha512-dqw6X88iGgZlTsONxZK9ePmJEFrmHwpuMrsUChjAw1mRUhUITE5QU9pkcSox+ynfLhL15Sv2al5A0LVyDCmtUw=="
+      crossorigin="anonymous"
+    ></script>
+    <script src="js/recorder/WebAudioRecorder.min.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/p5/sketch.js"></script>
+  </body>
+</html>

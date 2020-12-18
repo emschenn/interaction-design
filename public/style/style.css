@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#canva {
+  width: 400px;
+  height: 608px;
+  margin-top: 5.5em;
+  border: 1px #000000 solid;
+}
+#canva canvas {
+  position: relative;
+  top: 30px;
+  left: 30px;
+}
+#canva #date {
+  font-size: 16px;
+  position: relative;
+  top: 105px;
+  left: 275px;
+}
+#canva #qrcode img {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  left: 270px;
+  top: 120px;
+}
+
+.ui.modal .content .image {
+  position: relative;
+  left: 100px;
+}
+.ui.modal .content .description {
+  position: relative;
+  left: 150px;
+}
+
+/*# sourceMappingURL=style.css.map */
