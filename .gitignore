@@ -5,4 +5,4 @@ node_modules/
 **/.DS_Store
 
 # Google API token
-google_api/*
+google_api/*.json

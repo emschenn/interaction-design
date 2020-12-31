@@ -33,39 +33,25 @@
 
   <body>
     <div class="ui container">
-      <div class="ui two column very relaxed grid">
-        <div class="column" style="top: 100px">
-          <div class="row" style="margin-top: 10px">
-            <button class="ui grey button" id="recordButton">Record</button>
-            <button class="ui grey button" id="stopButton">Stop</button>
-          </div>
-          <div class="row" style="margin-top: 10px">
-            <button class="ui grey button" id="randomButton">
-              Record randomly
-            </button>
-          </div>
+      <div id="recorder" class="rec"></div>
 
-          <div class="row" style="margin-top: 120px">
-            <div id="recordingsList"></div>
-          </div>
-          <div class="row" style="margin-top: 20px">
-            <button class="ui grey button" id="saveButton">Save</button>
-            <button class="ui grey button" id="printButton">
-              I want to print
-            </button>
-          </div>
-          <div class="row" style="margin-top: 20px">
-            <button class="ui grey button" id="restartButton">Restart</button>
-          </div>
-        </div>
-        <div class="column">
-          <div id="canva">
-            <div id="p5"></div>
-            <div id="date"></div>
+      <div class="button" id="startButton"><em>Click Here </em> to try!</div>
+      <div id="description">
+        Pablo會在這一分鐘內隨機錄製15秒的聲音、並生成圖像
+      </div>
+      <div id="placeholder">
+        <img src="img/placeholder.png" />
+        <img class="on-hover" src="img/placeholder-top.png" />
+      </div>
 
-            <div id="qrcode"></div>
-          </div>
-        </div>
+      <div class="button" id="resetButton">Try <em>again!</em></div>
+      <div class="button" id="printButton"><em>Print </em> out</div>
+      <div class="button" id="progressBar"><div id="counter"></div></div>
+
+      <div id="canva">
+        <div id="p5"></div>
+        <div id="date"></div>
+        <div id="qrcode"></div>
       </div>
       <div class="ui modal" id="modal">
         <i class="close icon"></i>

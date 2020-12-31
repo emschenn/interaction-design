@@ -54,6 +54,10 @@ function draw() {
       fill(mid * 2, lerp(highMid, bass / 3, 0.7), 0);
     }
     drawSpectrum();
+    if (!s.isPlaying() && qrDone) {
+      $("#printButton").fadeIn(1500);
+      $("#resetButton").fadeIn(1500);
+    }
     // console.log("Bass: "+bass+" lowMid: "+lowMid+" mid: "+mid+" highMid: "+highMid+" treble: "+treble);
   }
 }

@@ -17,6 +17,7 @@ let audio = { data: null, name: "" };
 // var for p5
 let s;
 let flag = false;
+let qrDone = false;
 
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
@@ -25,49 +26,30 @@ const getRandomInt = (min, max) => {
 };
 
 // ✨ set random start time here ✨
-const rnd_start_time = getRandomInt(1, 5);
+const rnd_start_time = 0; //getRandomInt(1, 40);
 
 window.onload = () => init();
-$("#restartButton").click(() => init());
+$("#resetButton").click(() => init());
 
 const init = () => {
   audio = { data: null, name: "" };
+  flag = false;
+  qrDone = false;
   var d = new Date();
   var n = d.getDate();
   document.getElementById("date").innerHTML = n + " Dec, 2020";
   $("#canva").hide();
-  stopButton.disabled = true;
-  printButton.disabled = true;
-  saveButton.disabled = true;
-  restartButton.disabled = true;
+  $("#placeholder").hide();
+  $("#startButton").show();
+  $("#description").hide();
+  $("#progressBar").hide();
+  $("#printButton").hide();
+  $("#resetButton").hide();
+  $("#qrcode").hide();
+  $("#recorder").hide();
 };
 
-$("#recordButton").click(() => {
-  new Promise(function (resolve) {
-    recordButton.disabled = true;
-    randomButton.disabled = true;
-    stopButton.disabled = false;
-    saveButton.disabled = true;
-    resolve("start recoding");
-  }).then(startRecording());
-});
-
-$("#stopButton").click(() => {
-  new Promise(function (resolve) {
-    recordButton.disabled = false;
-    randomButton.disabled = false;
-    stopButton.disabled = true;
-    saveButton.disabled = false;
-    resolve("stop recoding");
-  }).then(stopRecording());
-});
-
-$("#randomButton").click(() => {
-  randomButton.disabled = true;
-  recordButton.disabled = true;
-  stopButton.disabled = true;
-  saveButton.disabled = true;
-
+const randomRecording = () => {
   const randomlyStart = () => {
     return new Promise(function (resolve) {
       window.setTimeout(function () {
@@ -81,21 +63,43 @@ $("#randomButton").click(() => {
       window.setTimeout(function () {
         stopRecording();
         resolve("stop recoding");
-      }, 16000);
+      }, 16000); //16000
     });
   };
-  const buttonEnabled = () => {
-    return new Promise(function () {
-      randomButton.disabled = false;
-      recordButton.disabled = false;
-      stopButton.disabled = true;
-      saveButton.disabled = false;
-    });
-  };
-  randomlyStart().then(randomlyStop).then(buttonEnabled);
+  randomlyStart().then(randomlyStop);
+};
+
+$("#startButton").click(() => {
+  $("#startButton").fadeOut("", () => {
+    $("#startButton").hide();
+    $("#progressBar").fadeIn(300);
+    $("#description").fadeIn(300);
+    $("#recorder").show(300);
+  });
+  randomRecording();
+  const elem = document.getElementById("counter");
+  let wid = 60;
+  let id = setInterval(frame, 50); //200
+  function frame() {
+    if (wid == 365) {
+      $("#recorder").hide();
+      $("#placeholder").fadeIn(300);
+      $("#description").fadeOut(500);
+      $("#progressBar").fadeOut(500);
+      clearInterval(id);
+    } else {
+      wid = wid + 1;
+      elem.style.width = wid + "px";
+    }
+  }
 });
 
-$("#saveButton").click(() => {
+$("#placeholder").click(() => {
+  $("#placeholder").fadeOut(300);
+  generate();
+});
+
+const generate = () => {
   let formdata = new FormData(); //create a from to of data to upload to the server
   formdata.append("soundBlob", audio.data, audio.name); // append the sound blob and the name of the file. third argument will show up on the server as req.file.originalname
 
@@ -113,12 +117,8 @@ $("#saveButton").click(() => {
     .then(() => {
       geneQrcode();
       runP5();
-    })
-    .then(() => {
-      restartButton.disabled = false;
-      printButton.disabled = false;
     });
-});
+};
 
 $("#printButton").click(() => {
   html2canvas(document.querySelector("#canva")).then((canvas) => {
@@ -178,7 +178,16 @@ const geneQrcode = () => {
     })
     .then((result) => {
       const url = `https://drive.google.com/file/d/${result.fileId}/view?usp=sharing`;
-      new QRCode(document.getElementById("qrcode"), url);
+      console.log(url);
+      new QRCode("qrcode", {
+        text: url,
+        width: 100,
+        height: 100,
+      });
+    })
+    .then(() => {
+      $("#qrcode").fadeIn(300);
+      qrDone = true;
     });
 };
 
@@ -239,7 +248,6 @@ function stopRecording() {
 function createDownloadLink(blob, encoding) {
   var url = URL.createObjectURL(blob);
   var au = document.createElement("audio");
-  var div = document.createElement("div");
   var link = document.createElement("p");
   var fileReader = new FileReader();
   fileReader.onload = function (e) {
@@ -254,9 +262,6 @@ function createDownloadLink(blob, encoding) {
   link.download = new Date().toISOString() + "." + encoding;
   link.innerHTML = link.download;
   audio.name = link.download.replace(/:/gi, "_");
-
-  div.innerHTML = "";
-  recordingsList.innerHTML = "";
 
   // div.appendChild(au);
   // div.appendChild(link);

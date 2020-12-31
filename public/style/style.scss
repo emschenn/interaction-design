@@ -1,16 +1,20 @@
 $canva-width: 400px;
 $canva-height: 608px;
-
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap");
 body {
   margin: 0;
   height: 100vh;
   overflow: hidden;
+  background-image: url("../img/bg.png");
+  background-repeat: no-repeat;
 }
+
 #canva {
   width: $canva-width;
   height: $canva-height;
-  margin-top: 5.5em;
-  border: 1px #000000 solid;
+  position: absolute;
+  left: 747px;
+  top: 146px;
   canvas {
     position: relative;
     top: (($canva-width)-340)/2;
@@ -39,5 +43,127 @@ body {
   .description {
     position: relative;
     left: 150px;
+  }
+}
+
+.button {
+  height: 60px;
+  position: absolute;
+  font-family: "Lato", sans-serif;
+  border-radius: 30px;
+  font-size: 24px;
+  line-height: 60px;
+  align-items: center;
+  text-align: center;
+  font-weight: 300;
+  cursor: pointer;
+  em {
+    font-weight: 700;
+    font-style: normal;
+  }
+}
+
+#description {
+  width: 435px;
+  text-align: center;
+  color: #8c8b81;
+  letter-spacing: 1.5px;
+  text-align: center;
+  position: absolute;
+  left: 197px;
+  top: 585px;
+  font-size: 14px;
+}
+
+#startButton {
+  background: #d0cec2;
+  color: #ffffff;
+  position: absolute;
+  width: 280px;
+  left: 264px;
+  top: 552px;
+}
+
+#resetButton {
+  background: #d0cec2;
+  color: #ffffff;
+  position: absolute;
+  width: 175px;
+  left: 230px;
+  top: 620px;
+}
+
+#printButton {
+  background: #f1f1ef;
+  color: #8c8b81;
+  position: absolute;
+  width: 175px;
+  left: 420px;
+  top: 620px;
+}
+
+#progressBar {
+  //border: solid 3px
+  background-color: #e4e2d775;
+  width: 365px;
+  left: 230px;
+  top: 620px;
+}
+#counter {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  width: 60px;
+  height: 60px;
+  background-color: #e6e4dc;
+  border-radius: 60px;
+}
+
+.rec {
+  animation-name: pulse;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+#recorder {
+  height: 22px;
+  width: 22px;
+  background-color: rgb(150, 0, 0);
+  border-radius: 22px;
+  position: absolute;
+  top: 198px;
+  left: 580px;
+}
+@keyframes pulse {
+  0% {
+    box-shadow: 0px 0px 3px 0px rgba(150, 0, 0, 0.3);
+  }
+  30% {
+    box-shadow: 0px 0px 3px 5px rgba(150, 0, 0, 0.2);
+  }
+  60% {
+    box-shadow: 0px 0px 3px 8px rgba(150, 0, 0, 0.1);
+  }
+  90% {
+    box-shadow: 0px 0px 3px 12px rgba(150, 0, 0, 0);
+  }
+}
+
+#placeholder {
+  position: absolute;
+  left: 747px;
+  top: 146px;
+  display: inline-block;
+  .on-hover {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 99;
+  }
+  &:hover .on-hover {
+    cursor: pointer;
+    display: inline;
   }
 }
