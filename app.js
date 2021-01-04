@@ -6,36 +6,50 @@ const async = require("async");
 const readline = require("readline");
 const { google } = require("googleapis");
 const { PythonShell } = require("python-shell");
+const { file } = require("googleapis/build/src/apis/file");
 
 const SCOPES = ["https://www.googleapis.com/auth/drive"];
 const TOKEN_PATH = "./google_api/token.json";
 const CREDENTIALS_PATH = "./google_api/credentials.json";
 const PYTHON_SCRIPT_PATH = "./analysis_emotion/main.py";
 const SAVED_AUDIO_PATH = "/public/saved_audio/";
+const SAVED_IMAGE_PATH = "/public/saved_image/";
 
 const app = express();
 app.use(express.static("public"));
 app.use(express.json({ limit: "50mb" }));
 
-app.post("/get-url", uploadToGoogle);
+app.post("/upload-audio-google", uploadAudioToGoogle);
+
+app.post("/upload-image-google", uploadImageToGoogle);
 
 app.get("/get-emotion", pythonProcess);
 
-app.post("/upload", upload.single("soundBlob"), function (req, res, next) {
+app.post("/save-audio", upload.single("soundBlob"), function (req, res, next) {
   //console.log(req.file); // see what got uploaded
-
   let uploadLocation = __dirname + SAVED_AUDIO_PATH + req.file.originalname; // where to save the file to. make sure the incoming name has a .wav extension
-
   try {
     fs.writeFileSync(
       uploadLocation,
       Buffer.from(new Uint8Array(req.file.buffer))
     );
   } catch (err) {
-    // An error occurred
     console.error(err);
   }
-  res.sendStatus(200); //send back that everything went ok
+  res.sendStatus(200);
+});
+
+app.post("/save-image", function (req, res) {
+  const { url, name } = req.body;
+  const data = url.replace(/^data:image\/\w+;base64,/, "");
+  const filename = name.replace(".wav", ".jpeg");
+  let uploadLocation = __dirname + SAVED_IMAGE_PATH + filename;
+  try {
+    fs.writeFile(uploadLocation, Buffer.from(data, "base64"));
+  } catch (err) {
+    console.error(err);
+  }
+  res.sendStatus(200);
 });
 
 const PORT = process.env.PORT || 3000;
@@ -66,23 +80,45 @@ function pythonProcess(req, res) {
 
 /*
  *
- get-url:
+upload-audio-google:
   - upload audio file to google drive
   - set the permissions to anyone can read
   - return share url
  *
  */
-
-function uploadToGoogle(req, res) {
-  const filename = req.body.audio;
-
+function uploadImageToGoogle(req, res) {
+  let filename = req.body.image;
+  filename = filename.replace(".wav", ".jpeg");
+  console.log(filename);
+  const resource = {
+    name: filename,
+  };
+  const media = {
+    mimeType: "image/jpeg",
+    body: fs.createReadStream(`./public/saved_image/${filename}`),
+  };
   fs.readFile(CREDENTIALS_PATH, (err, content) => {
     if (err) return res.status(400).send(err);
-    authorize(JSON.parse(content), filename, res);
+    authorize(JSON.parse(content), resource, media, res);
   });
 }
 
-function authorize(credentials, filename, res) {
+function uploadAudioToGoogle(req, res) {
+  const filename = req.body.audio;
+  const resource = {
+    name: filename,
+  };
+  const media = {
+    mimeType: "audio/mpeg",
+    body: fs.createReadStream(`./public/saved_audio/${filename}`),
+  };
+  fs.readFile(CREDENTIALS_PATH, (err, content) => {
+    if (err) return res.status(400).send(err);
+    authorize(JSON.parse(content), resource, media, res);
+  });
+}
+
+function authorize(credentials, resource, media, res) {
   const { client_secret, client_id, redirect_uris } = credentials.installed;
   const oAuth2Client = new google.auth.OAuth2(
     client_id,
@@ -93,7 +129,7 @@ function authorize(credentials, filename, res) {
   fs.readFile(TOKEN_PATH, (err, token) => {
     if (err) return getAccessToken(oAuth2Client);
     oAuth2Client.setCredentials(JSON.parse(token));
-    return uploadFile(oAuth2Client, filename, res);
+    return uploadFile(oAuth2Client, resource, media, res);
   });
 }
 
@@ -122,17 +158,12 @@ function getAccessToken(oAuth2Client) {
   });
 }
 
-function uploadFile(auth, filename, res) {
+function uploadFile(auth, resource, media, res) {
   const drive = google.drive({ version: "v3", auth });
   drive.files.create(
     {
-      resource: {
-        name: filename,
-      },
-      media: {
-        mimeType: "audio/mpeg",
-        body: fs.createReadStream(`./public/saved_audio/${filename}`),
-      },
+      resource: resource,
+      media: media,
       fields: "id",
     },
     function (err, { data }) {

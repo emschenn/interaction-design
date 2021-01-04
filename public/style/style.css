@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400&display=swap");
 body {
   margin: 0;
   height: 100vh;
@@ -22,8 +23,8 @@ body {
 #canva #date {
   font-size: 16px;
   position: relative;
-  top: 105px;
-  left: 275px;
+  top: 107px;
+  left: 288px;
 }
 #canva #qrcode img {
   width: 100px;
@@ -33,13 +34,28 @@ body {
   top: 120px;
 }
 
-.ui.modal .content .image {
-  position: relative;
-  left: 100px;
+.ui.dimmer {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.ui.modal {
+  top: 150px !important;
+  width: 700px;
+  height: 500px;
+  overflow: hidden;
 }
 .ui.modal .content .description {
   position: relative;
   left: 150px;
+}
+.ui.modal .content img {
+  position: relative;
+  top: 130px;
+  width: 400px;
+  overflow: hidden;
+}
+.ui.modal .content img:hover {
+  top: 0px;
 }
 
 .button {
@@ -89,7 +105,7 @@ body {
   top: 620px;
 }
 
-#printButton {
+#replayButton {
   background: #f1f1ef;
   color: #8c8b81;
   position: absolute;
@@ -162,6 +178,68 @@ body {
 #placeholder:hover .on-hover {
   cursor: pointer;
   display: inline;
+}
+#placeholder .choose-style .style {
+  position: absolute;
+  top: 360px;
+  width: 90px;
+  height: 90px;
+  border-radius: 5px;
+  background-color: #e2e1df;
+  z-index: 100;
+  text-align: center;
+  color: white;
+  line-height: 90px;
+  font-family: "Lato", sans-serif;
+  font-size: 24px;
+  font-weight: 300;
+  cursor: pointer;
+}
+#placeholder .choose-style .style#style1 {
+  left: 45px;
+}
+#placeholder .choose-style .style#style1:hover {
+  color: rgba(0, 0, 0, 0);
+  background-image: url("../img/style1.png");
+  background-size: 90px;
+}
+#placeholder .choose-style .style#style2 {
+  left: 155px;
+}
+#placeholder .choose-style .style#style2:hover {
+  color: rgba(0, 0, 0, 0);
+  background-image: url("../img/style2.png");
+  background-size: 90px;
+}
+#placeholder .choose-style .style#style3 {
+  left: 265px;
+}
+#placeholder .choose-style .style#style3:hover {
+  color: rgba(0, 0, 0, 0);
+  background-image: url("../img/style3.png");
+  background-size: 90px;
+}
+
+#print {
+  cursor: pointer;
+  position: absolute;
+  left: 1035px;
+  top: 760px;
+  font-family: "Noto Sans TC", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 28px;
+  letter-spacing: 0.095em;
+  color: rgba(0, 0, 0, 0);
+  text-shadow: 0 0 0.8px rgba(0, 0, 0, 0.6);
+}
+#print img {
+  display: none;
+  width: 35px;
+  position: absolute;
+  left: 68px;
+  top: 0px;
 }
 
 /*# sourceMappingURL=style.css.map */

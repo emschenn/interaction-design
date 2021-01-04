@@ -16,8 +16,11 @@ let audio = { data: null, name: "" };
 
 // var for p5
 let s;
+let emotion;
 let flag = false;
 let qrDone = false;
+let style = 1;
+let replay = false;
 
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
@@ -35,16 +38,18 @@ const init = () => {
   audio = { data: null, name: "" };
   flag = false;
   qrDone = false;
+  replay = false;
   var d = new Date();
   var n = d.getDate();
-  document.getElementById("date").innerHTML = n + " Dec, 2020";
+  document.getElementById("date").innerHTML = n + " Jan, 2021";
   $("#canva").hide();
   $("#placeholder").hide();
   $("#startButton").show();
   $("#description").hide();
   $("#progressBar").hide();
-  $("#printButton").hide();
+  $("#replayButton").hide();
   $("#resetButton").hide();
+  $("#print").hide();
   $("#qrcode").hide();
   $("#recorder").hide();
 };
@@ -95,7 +100,32 @@ $("#startButton").click(() => {
 });
 
 $("#placeholder").click(() => {
+  $("#placeholder .play").hide();
+  $(".on-hover").hide();
+  $("#placeholder .choose-style").fadeIn(300);
+
+  // $("#placeholder").fadeOut(300);
+  //generate();
+});
+
+$("#placeholder .choose-style #style1").click(() => {
   $("#placeholder").fadeOut(300);
+  style = 1;
+  generate();
+});
+$("#placeholder .choose-style #style2").click(() => {
+  $("#placeholder").fadeOut(300);
+  style = 2;
+  drawingContext.shadowColor = color(255, 100);
+  drawingContext.shadowOffsetY = -3;
+  drawingContext.shadowBlur = 2;
+  pixelDensity(3);
+  generate();
+});
+$("#placeholder .choose-style #style3").click(() => {
+  $("#placeholder").fadeOut(300);
+  style = 3;
+  pixelDensity(2);
   generate();
 });
 
@@ -103,7 +133,7 @@ const generate = () => {
   let formdata = new FormData(); //create a from to of data to upload to the server
   formdata.append("soundBlob", audio.data, audio.name); // append the sound blob and the name of the file. third argument will show up on the server as req.file.originalname
 
-  fetch("/upload", {
+  fetch("/save-audio", {
     method: "POST",
     body: formdata,
     headers: {
@@ -111,17 +141,32 @@ const generate = () => {
     },
   })
     .then((res) => {
-      if (res.status === 200) clearCanvas();
+      if (res.status === 200 && !replay) clearCanvas();
     })
     .then(analysisEmotion)
     .then(() => {
-      geneQrcode();
+      if (!replay) geneQrcode();
+      else {
+        $("#date").show();
+        $("#qrcode").show();
+      }
       runP5();
     });
 };
 
-$("#printButton").click(() => {
+$("#print").click(() => {
   html2canvas(document.querySelector("#canva")).then((canvas) => {
+    const data = {
+      url: canvas.toDataURL("image/jpeg", 0.8),
+      name: audio.name,
+    };
+    fetch("/save-image", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "content-type": "application/json",
+      },
+    });
     $(".ui.modal .content .image").empty();
     $(".ui.modal .content .image").append(canvas);
     $(".ui.modal .content .image canvas").css({
@@ -130,6 +175,29 @@ $("#printButton").click(() => {
     });
     $(".ui.modal").modal("show");
   });
+});
+
+$("#uploadImage").click(() => {
+  const data = { image: audio.name };
+  fetch("/upload-image-google", {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "content-type": "application/json",
+    },
+  }).then((res) => {
+    if (res.status === 200) return res.json();
+    else return `error: ${res.err}`;
+  });
+});
+
+$("#replayButton").click(() => {
+  replay = true;
+  $("#placeholder").fadeIn(300);
+  $("#placeholder .choose-style").fadeIn(300);
+  $("#qrcode").hide();
+  $("#date").hide();
+  clear();
 });
 
 const clearCanvas = () => {
@@ -147,7 +215,8 @@ const analysisEmotion = () => {
       else return `error: ${res.err}`;
     })
     .then((result) => {
-      console.log(result.emotion);
+      emotion = result.emotion;
+      console.log(emotion);
     });
 };
 
@@ -165,7 +234,7 @@ const runP5 = async () => {
 
 const geneQrcode = () => {
   const data = { audio: audio.name };
-  fetch("/get-url", {
+  fetch("/upload-audio-google", {
     method: "POST",
     body: JSON.stringify(data),
     headers: {

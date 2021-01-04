@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "start": "node app.js"
   },
   "author": "  ",
   "license": "MIT",
@@ -16,8 +16,9 @@
     "html2canvas": "^1.0.0-rc.7",
     "multer": "^1.4.2",
     "mz": "^2.7.0",
-    "python-shell": "^2.0.3",
-    "webpack": "^5.9.0",
-    "webpack-cli": "^4.2.0"
+    "python-shell": "^2.0.3"
+  },
+  "engines": {
+    "node": "12.8.3"
   }
 }

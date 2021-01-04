@@ -40,12 +40,20 @@
         Pablo會在這一分鐘內隨機錄製15秒的聲音、並生成圖像
       </div>
       <div id="placeholder">
-        <img src="img/placeholder.png" />
-        <img class="on-hover" src="img/placeholder-top.png" />
+        <div class="play">
+          <img src="img/placeholder.png" />
+          <img class="on-hover" src="img/placeholder-top2.png" />
+        </div>
+        <div class="choose-style" style="display: none">
+          <img src="img/placeholder-style.png" />
+          <div id="style1" class="style">circle</div>
+          <div id="style2" class="style">spiral</div>
+          <div id="style3" class="style">block</div>
+        </div>
       </div>
 
       <div class="button" id="resetButton">Try <em>again!</em></div>
-      <div class="button" id="printButton"><em>Print </em> out</div>
+      <div class="button" id="replayButton"><em>Replay</em></div>
       <div class="button" id="progressBar"><div id="counter"></div></div>
 
       <div id="canva">
@@ -53,12 +61,16 @@
         <div id="date"></div>
         <div id="qrcode"></div>
       </div>
+      <div id="print">我要列印<img src="img/pablo.png" /></div>
       <div class="ui modal" id="modal">
         <i class="close icon"></i>
         <div class="header">我要列印</div>
         <div class="image content">
-          <div class="image"></div>
+          <!--div class="image"></div-->
+          <div id="uploadImage">點我上傳</div>
+
           <div class="description">1. 右鍵另存圖片至???<br />2. 跟我們說</div>
+          <img src="img/pablo2.png" />
         </div>
       </div>
     </div>
