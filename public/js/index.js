@@ -29,12 +29,14 @@ const getRandomInt = (min, max) => {
 };
 
 // ✨ set random start time here ✨
-const rnd_start_time = 0; //getRandomInt(1, 40);
+const rnd_start_time = getRandomInt(1, 10);
 
 window.onload = () => init();
 $("#resetButton").click(() => init());
 
 const init = () => {
+  //$(".ui.modal").modal("show");
+
   audio = { data: null, name: "" };
   flag = false;
   qrDone = false;
@@ -84,7 +86,7 @@ $("#startButton").click(() => {
   randomRecording();
   const elem = document.getElementById("counter");
   let wid = 60;
-  let id = setInterval(frame, 50); //200
+  let id = setInterval(frame, 100); //200
   function frame() {
     if (wid == 365) {
       $("#recorder").hide();
@@ -173,11 +175,13 @@ $("#print").click(() => {
       width: `${400 * (5 / 9)}px`,
       height: `${608 * (5 / 9)}px`,
     });
+    $("#uploadImage").html("<em>Upload</em> Img");
     $(".ui.modal").modal("show");
   });
 });
 
 $("#uploadImage").click(() => {
+  $("#uploadImage").text("Uploading...");
   const data = { image: audio.name };
   fetch("/upload-image-google", {
     method: "POST",
@@ -186,17 +190,23 @@ $("#uploadImage").click(() => {
       "content-type": "application/json",
     },
   }).then((res) => {
-    if (res.status === 200) return res.json();
-    else return `error: ${res.err}`;
+    if (res.status === 200) {
+      $("#uploadImage").html("<em>Done!</em>");
+      //$("#uploadImage").attr("disabled", true);
+      return res.json();
+    } else return `error: ${res.err}`;
   });
 });
 
 $("#replayButton").click(() => {
   replay = true;
+
   $("#placeholder").fadeIn(300);
   $("#placeholder .choose-style").fadeIn(300);
   $("#qrcode").hide();
   $("#date").hide();
+  $("#print").hide();
+
   clear();
 });
 

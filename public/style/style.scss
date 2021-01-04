@@ -49,16 +49,45 @@ body {
 
   .content {
     .description {
-      position: relative;
-      left: 150px;
+      position: absolute;
+      top: 60px;
+      left: 50px;
+      font-family: "Noto Sans TC", sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 28px;
+      letter-spacing: 0.095em;
+      color: rgba(0, 0, 0, 0);
+      text-shadow: 0 0 0.8px rgba(0, 0, 0, 0.6);
     }
     img {
-      position: relative;
+      position: absolute;
       top: 130px;
-      width: 400px;
+      left: 400px;
+      height: 450px;
       overflow: hidden;
-      &:hover {
-        top: 0px;
+    }
+
+    #uploadImage {
+      height: 60px;
+      position: absolute;
+      font-family: "Lato", sans-serif;
+      border-radius: 30px;
+      font-size: 24px;
+      line-height: 60px;
+      align-items: center;
+      text-align: center;
+      font-weight: 300;
+      background: #f1f1ef;
+      color: #8c8b81;
+      width: 175px;
+      top: 350px;
+      left: 120px;
+      cursor: pointer;
+      em {
+        font-weight: 700;
+        font-style: normal;
       }
     }
   }
@@ -119,7 +148,6 @@ body {
   left: 420px;
   top: 620px;
 }
-
 #progressBar {
   //border: solid 3px
   background-color: #e4e2d775;
@@ -231,17 +259,26 @@ body {
 #print {
   cursor: pointer;
   position: absolute;
-  left: 1035px;
-  top: 760px;
-
-  font-family: "Noto Sans TC", sans-serif;
-  font-style: normal;
+  left: 1060px;
+  top: 770px;
+  height: 30px;
+  border-radius: 30px;
+  font-size: 16px;
+  line-height: 60px;
+  align-items: center;
+  text-align: center;
+  background: #f1f1ef;
+  color: #8c8b81;
+  font-family: "Lato", sans-serif;
+  //font-style: normal;
   font-weight: 400;
   font-size: 16px;
+  width: 75px;
+
   line-height: 28px;
-  letter-spacing: 0.095em;
-  color: rgba(0, 0, 0, 0);
-  text-shadow: 0 0 0.8px rgba(0, 0, 0, 0.6);
+  //letter-spacing: 0.095em;
+  //color: rgba(0, 0, 0, 0.644);
+  //text-shadow: 0 0 0.8px rgba(0, 0, 0, 0.6);
   img {
     display: none;
     width: 35px;

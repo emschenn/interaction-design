@@ -90,8 +90,10 @@ function uploadImageToGoogle(req, res) {
   let filename = req.body.image;
   filename = filename.replace(".wav", ".jpeg");
   console.log(filename);
+  const folderId = "1H66g3Z9AmuECBpa-8lRyj2VUnt7D6hIt";
   const resource = {
     name: filename,
+    parents: [folderId],
   };
   const media = {
     mimeType: "image/jpeg",

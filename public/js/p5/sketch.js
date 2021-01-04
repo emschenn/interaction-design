@@ -121,7 +121,6 @@ function draw() {
       rotate(frameCount / 50);
       drawSpectrum2();
     } else if (style == 3) {
-      emotion = "happy";
       bass = fft.getEnergy("bass");
       lowMid = fft.getEnergy("lowMid");
       mid = fft.getEnergy("mid");
@@ -195,8 +194,10 @@ function draw() {
 
       drawSpectrum3();
     }
-
-    if (!s.isPlaying() && qrDone) {
+    if (replay == true) {
+      $("#print").hide();
+      if (s.isPlaying()) replay = false;
+    } else if (!s.isPlaying() && qrDone) {
       $("#print").fadeIn(1500);
       $("#replayButton").fadeIn(1500);
       $("#resetButton").fadeIn(1500);
