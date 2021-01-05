@@ -107,8 +107,10 @@ function uploadImageToGoogle(req, res) {
 
 function uploadAudioToGoogle(req, res) {
   const filename = req.body.audio;
+  const folderId = "1nrgBh7j_yUvGdZyDxSUNzqoq0XpjAI4_";
   const resource = {
     name: filename,
+    parents: [folderId],
   };
   const media = {
     mimeType: "audio/mpeg",
