@@ -1,6 +1,7 @@
 let song, buttton, fft, space_between_lines;
 
 let bass, lowMid, mid, highMid, treble;
+let mic, p5recorder, soundFile;
 let spectrum, level;
 // function preload() {
 //   s = loadSound("./saved_audio/1.m4a");
@@ -13,6 +14,17 @@ function setup() {
 
   fft = new p5.FFT();
   frameRate(30);
+
+  mic = new p5.AudioIn();
+  // prompts user to enable their browser mic
+  mic.start();
+  // create a sound recorder
+  p5recorder = new p5.SoundRecorder();
+  // connect the mic to the recorder
+  p5recorder.setInput(mic);
+  // this sound file will be used to
+  // playback & save the recording
+  soundFile = new p5.SoundFile();
 }
 
 function drawSpectrum() {
@@ -196,8 +208,8 @@ function draw() {
     }
     if (replay == true) {
       $("#print").hide();
-      if (s.isPlaying()) replay = false;
-    } else if (!s.isPlaying() && qrDone) {
+      if (soundFile.isPlaying()) replay = false;
+    } else if (!soundFile.isPlaying() && qrDone) {
       $("#print").fadeIn(1500);
       $("#replayButton").fadeIn(1500);
       $("#resetButton").fadeIn(1500);

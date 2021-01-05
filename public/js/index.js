@@ -29,7 +29,7 @@ const getRandomInt = (min, max) => {
 };
 
 // ✨ set random start time here ✨
-const rnd_start_time = getRandomInt(1, 10);
+const rnd_start_time = 0;
 
 window.onload = () => init();
 $("#resetButton").click(() => init());
@@ -60,6 +60,7 @@ const randomRecording = () => {
   const randomlyStart = () => {
     return new Promise(function (resolve) {
       window.setTimeout(function () {
+        p5recorder.record(soundFile);
         startRecording();
         resolve("start recoding");
       }, rnd_start_time);
@@ -68,9 +69,10 @@ const randomRecording = () => {
   const randomlyStop = () => {
     return new Promise(function (resolve) {
       window.setTimeout(function () {
+        p5recorder.stop();
         stopRecording();
         resolve("stop recoding");
-      }, 16000); //16000
+      }, 10000); //16000
     });
   };
   randomlyStart().then(randomlyStop);
@@ -86,7 +88,7 @@ $("#startButton").click(() => {
   randomRecording();
   const elem = document.getElementById("counter");
   let wid = 60;
-  let id = setInterval(frame, 100); //200
+  let id = setInterval(frame, 50); //200
   function frame() {
     if (wid == 365) {
       $("#recorder").hide();
@@ -132,6 +134,13 @@ $("#placeholder .choose-style #style3").click(() => {
 });
 
 const generate = () => {
+  runP5();
+  if (replay) {
+    $("#date").show();
+    $("#qrcode").show();
+    return;
+  }
+
   let formdata = new FormData(); //create a from to of data to upload to the server
   formdata.append("soundBlob", audio.data, audio.name); // append the sound blob and the name of the file. third argument will show up on the server as req.file.originalname
 
@@ -143,76 +152,39 @@ const generate = () => {
     },
   })
     .then((res) => {
-      if (res.status === 200 && !replay) clearCanvas();
+      if (res.status === 200) return res.json();
+      else return `error: ${res.err}`;
     })
-    .then(analysisEmotion)
+    .then((result) => {
+      const url = `https://drive.google.com/file/d/${result.fileId}/view?usp=sharing`;
+      console.log(url);
+      new QRCode("qrcode", {
+        text: url,
+        width: 100,
+        height: 100,
+      });
+    })
     .then(() => {
-      if (!replay) geneQrcode();
-      else {
-        $("#date").show();
-        $("#qrcode").show();
-      }
-      runP5();
+      $("#qrcode").fadeIn(300);
+      $("#date").show();
+      $("#qrcode").show();
+      qrDone = true;
     });
 };
 
-$("#print").click(() => {
-  html2canvas(document.querySelector("#canva")).then((canvas) => {
-    const data = {
-      url: canvas.toDataURL("image/jpeg", 0.8),
-      name: audio.name,
-    };
-    fetch("/save-image", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "content-type": "application/json",
-      },
-    });
-    $(".ui.modal .content .image").empty();
-    $(".ui.modal .content .image").append(canvas);
-    $(".ui.modal .content .image canvas").css({
-      width: `${400 * (5 / 9)}px`,
-      height: `${608 * (5 / 9)}px`,
-    });
-    $("#uploadImage").html("<em>Upload</em> Img");
-    $(".ui.modal").modal("show");
-  });
-});
-
-$("#uploadImage").click(() => {
-  $("#uploadImage").text("Uploading...");
-  const data = { image: audio.name };
-  fetch("/upload-image-google", {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "content-type": "application/json",
-    },
-  }).then((res) => {
-    if (res.status === 200) {
-      $("#uploadImage").html("<em>Done!</em>");
-      //$("#uploadImage").attr("disabled", true);
-      return res.json();
-    } else return `error: ${res.err}`;
-  });
-});
-
 $("#replayButton").click(() => {
   replay = true;
-
   $("#placeholder").fadeIn(300);
   $("#placeholder .choose-style").fadeIn(300);
   $("#qrcode").hide();
   $("#date").hide();
   $("#print").hide();
-
   clear();
 });
 
 const clearCanvas = () => {
   clear();
-  $("#qrcode").empty();
+  if (!replay) $("#qrcode").empty();
   $("#canva").show();
 };
 
@@ -231,14 +203,9 @@ const analysisEmotion = () => {
 };
 
 const runP5 = async () => {
-  s = await new Promise((resolve, reject) => {
-    new p5.SoundFile(
-      `saved_audio/${audio.name}`,
-      (s) => resolve(s),
-      (err) => reject(err)
-    );
-  });
-  s.play();
+  clearCanvas();
+  soundFile.setVolume(1);
+  soundFile.play();
   flag = true;
 };
 
@@ -341,15 +308,18 @@ function createDownloadLink(blob, encoding) {
   link.download = new Date().toISOString() + "." + encoding;
   link.innerHTML = link.download;
   audio.name = link.download.replace(/:/gi, "_");
-
-  // div.appendChild(au);
-  // div.appendChild(link);
-  // recordingsList.appendChild(div);
 }
 
 function __log(e, data) {
   console.log("\n" + e + " " + (data || ""));
 }
 
-//clientID 923508977284-9t191qu67stf4v17t0i1p82ftlh573bj.apps.googleusercontent.com
-//clientSecret CzUURSoMFb3BAFNBMpGFNVyG
+$("#print").click(() => {
+  html2canvas(document.querySelector("#canva")).then((canvas) => {
+    var gh = canvas.toDataURL("png");
+    var a = document.createElement("a");
+    a.href = gh;
+    a.download = "image.png";
+    a.click();
+  });
+});

@@ -7,6 +7,7 @@ const readline = require("readline");
 const { google } = require("googleapis");
 const { PythonShell } = require("python-shell");
 const { file } = require("googleapis/build/src/apis/file");
+const stream = require("stream"); // Added
 
 const SCOPES = ["https://www.googleapis.com/auth/drive"];
 const TOKEN_PATH = "./google_api/token.json";
@@ -19,37 +20,25 @@ const app = express();
 app.use(express.static("public"));
 app.use(express.json({ limit: "50mb" }));
 
-app.post("/upload-audio-google", uploadAudioToGoogle);
-
-app.post("/upload-image-google", uploadImageToGoogle);
-
 app.get("/get-emotion", pythonProcess);
 
 app.post("/save-audio", upload.single("soundBlob"), function (req, res, next) {
-  //console.log(req.file); // see what got uploaded
-  let uploadLocation = __dirname + SAVED_AUDIO_PATH + req.file.originalname; // where to save the file to. make sure the incoming name has a .wav extension
-  try {
-    fs.writeFileSync(
-      uploadLocation,
-      Buffer.from(new Uint8Array(req.file.buffer))
-    );
-  } catch (err) {
-    console.error(err);
-  }
-  res.sendStatus(200);
-});
+  var bufStream = new stream.PassThrough(); // Added
+  bufStream.end(req.file.buffer);
+  const folderId = "1nrgBh7j_yUvGdZyDxSUNzqoq0XpjAI4_";
+  const resource = {
+    name: req.file.originalname,
+    parents: [folderId],
+  };
+  const media = {
+    mimeType: "audio/mpeg",
+    body: bufStream,
+  };
 
-app.post("/save-image", function (req, res) {
-  const { url, name } = req.body;
-  const data = url.replace(/^data:image\/\w+;base64,/, "");
-  const filename = name.replace(".wav", ".jpeg");
-  let uploadLocation = __dirname + SAVED_IMAGE_PATH + filename;
-  try {
-    fs.writeFile(uploadLocation, Buffer.from(data, "base64"));
-  } catch (err) {
-    console.error(err);
-  }
-  res.sendStatus(200);
+  fs.readFile(CREDENTIALS_PATH, (err, content) => {
+    if (err) return res.status(400).send(err);
+    authorize(JSON.parse(content), resource, media, res);
+  });
 });
 
 const PORT = process.env.PORT || 3000;
@@ -86,39 +75,6 @@ upload-audio-google:
   - return share url
  *
  */
-function uploadImageToGoogle(req, res) {
-  let filename = req.body.image;
-  filename = filename.replace(".wav", ".jpeg");
-  console.log(filename);
-  const folderId = "1H66g3Z9AmuECBpa-8lRyj2VUnt7D6hIt";
-  const resource = {
-    name: filename,
-    parents: [folderId],
-  };
-  const media = {
-    mimeType: "image/jpeg",
-    body: fs.createReadStream(`./public/saved_image/${filename}`),
-  };
-  fs.readFile(CREDENTIALS_PATH, (err, content) => {
-    if (err) return res.status(400).send(err);
-    authorize(JSON.parse(content), resource, media, res);
-  });
-}
-
-function uploadAudioToGoogle(req, res) {
-  const filename = req.body.audio;
-  const resource = {
-    name: filename,
-  };
-  const media = {
-    mimeType: "audio/mpeg",
-    body: fs.createReadStream(`./public/saved_audio/${filename}`),
-  };
-  fs.readFile(CREDENTIALS_PATH, (err, content) => {
-    if (err) return res.status(400).send(err);
-    authorize(JSON.parse(content), resource, media, res);
-  });
-}
 
 function authorize(credentials, resource, media, res) {
   const { client_secret, client_id, redirect_uris } = credentials.installed;
