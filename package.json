@@ -19,6 +19,6 @@
     "python-shell": "^2.0.3"
   },
   "engines": {
-    "node": "12.8.3"
+    "node": "12.x"
   }
 }
