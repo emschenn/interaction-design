@@ -14,6 +14,9 @@ let audioContext;
 
 let audio = { data: null, name: "" };
 
+let width;
+let isMobile;
+
 // var for p5
 let s;
 let emotion;
@@ -31,12 +34,19 @@ const getRandomInt = (min, max) => {
 // ✨ set random start time here ✨
 const rnd_start_time = 0;
 
-window.onload = () => init();
-$("#resetButton").click(() => init());
+window.onload = () => {
+  width = window.innerWidth > 0 ? window.innerWidth : screen.width;
+  isMobile = width > 768 ? false : true;
+  init();
+};
+$(".resetButton").click(() => {
+  init();
+});
 
 const init = () => {
-  //$(".ui.modal").modal("show");
-
+  if (isMobile) {
+    $("html, body").animate({ scrollTop: 0 }, 1000);
+  }
   audio = { data: null, name: "" };
   flag = false;
   qrDone = false;
@@ -44,16 +54,23 @@ const init = () => {
   var d = new Date();
   var n = d.getDate();
   document.getElementById("date").innerHTML = n + " Jan, 2021";
-  $("#canva").hide();
-  $("#placeholder").hide();
+
+  hideCanva();
   $("#startButton").show();
-  $("#description").hide();
+
+  $("#hint").hide();
   $("#progressBar").hide();
-  $("#replayButton").hide();
-  $("#resetButton").hide();
+  $(".replayButton").hide();
+  $(".resetButton").hide();
   $("#print").hide();
-  $("#qrcode").hide();
   $("#recorder").hide();
+};
+
+const hideCanva = () => {
+  $("#placeholder").hide();
+  $("#p5").hide();
+  $("#date").hide();
+  $("#qrcode").hide();
 };
 
 const randomRecording = () => {
@@ -72,7 +89,7 @@ const randomRecording = () => {
         p5recorder.stop();
         stopRecording();
         resolve("stop recoding");
-      }, 10000); //16000
+      }, 16000); //16000
     });
   };
   randomlyStart().then(randomlyStop);
@@ -82,20 +99,24 @@ $("#startButton").click(() => {
   $("#startButton").fadeOut("", () => {
     $("#startButton").hide();
     $("#progressBar").fadeIn(300);
-    $("#description").fadeIn(300);
+    $("#hint").fadeIn(300);
     $("#recorder").show(300);
   });
   randomRecording();
   const elem = document.getElementById("counter");
   let wid = 60;
-  let id = setInterval(frame, 50); //200
+  let id = setInterval(frame, 120); //200
   function frame() {
-    if (wid == 365) {
+    if (wid == (isMobile ? Math.floor(width * 0.7) : 380)) {
       $("#recorder").hide();
       $("#placeholder").fadeIn(300);
-      $("#description").fadeOut(500);
+      $("#hint").fadeOut(500);
       $("#progressBar").fadeOut(500);
       clearInterval(id);
+      if (isMobile) {
+        $("html, body").animate({ scrollTop: 2000 }, 2000);
+        $("body").css({ overflow: "auto" });
+      }
     } else {
       wid = wid + 1;
       elem.style.width = wid + "px";
@@ -104,21 +125,38 @@ $("#startButton").click(() => {
 });
 
 $("#placeholder").click(() => {
-  $("#placeholder .play").hide();
-  $(".on-hover").hide();
+  $("#placeholder img").hide();
+  $("#canva #p5").hide();
+  $("#placeholder .on-hover").hide();
   $("#placeholder .choose-style").fadeIn(300);
+  $("#placeholder .choose-style img").fadeIn(300);
 
   // $("#placeholder").fadeOut(300);
   //generate();
 });
 
-$("#placeholder .choose-style #style1").click(() => {
+$("#placeholder .choose-style #style1").click((event) => {
+  event.stopPropagation();
+
+  $("#canva #p5").fadeIn();
   $("#placeholder").fadeOut(300);
+
   style = 1;
   generate();
+  // setTimeout(() => {
+  //   $("#print").fadeIn(1500);
+  //   $(".replayButton").fadeIn(1500);
+  //   $(".resetButton").fadeIn(1500);
+  //   $("#qrcode").fadeIn(1500);
+  //   $("#date").show();
+  // }, 2000);
 });
-$("#placeholder .choose-style #style2").click(() => {
+$("#placeholder .choose-style #style2").click((event) => {
+  event.stopPropagation();
+
+  $("#canva #p5").fadeIn();
   $("#placeholder").fadeOut(300);
+
   style = 2;
   drawingContext.shadowColor = color(255, 100);
   drawingContext.shadowOffsetY = -3;
@@ -126,8 +164,12 @@ $("#placeholder .choose-style #style2").click(() => {
   pixelDensity(3);
   generate();
 });
-$("#placeholder .choose-style #style3").click(() => {
+$("#placeholder .choose-style #style3").click((event) => {
+  event.stopPropagation();
+
+  $("#canva #p5").fadeIn();
   $("#placeholder").fadeOut(300);
+
   style = 3;
   pixelDensity(2);
   generate();
@@ -157,11 +199,11 @@ const generate = () => {
     })
     .then((result) => {
       const url = `https://drive.google.com/file/d/${result.fileId}/view?usp=sharing`;
-      console.log(url);
+      // console.log(url);
       new QRCode("qrcode", {
         text: url,
-        width: 100,
-        height: 100,
+        width: width * 0.17,
+        height: width * 0.17,
       });
     })
     .then(() => {
@@ -172,13 +214,15 @@ const generate = () => {
     });
 };
 
-$("#replayButton").click(() => {
+$(".replayButton").click(() => {
   replay = true;
   $("#placeholder").fadeIn(300);
   $("#placeholder .choose-style").fadeIn(300);
   $("#qrcode").hide();
   $("#date").hide();
-  $("#print").hide();
+  $("#print").css({
+    visibility: "hidden",
+  });
   clear();
 });
 
@@ -186,20 +230,6 @@ const clearCanvas = () => {
   clear();
   if (!replay) $("#qrcode").empty();
   $("#canva").show();
-};
-
-const analysisEmotion = () => {
-  fetch(`/get-emotion?audio=${audio.name}`, {
-    method: "GET",
-  })
-    .then((res) => {
-      if (res.status === 200) return res.json();
-      else return `error: ${res.err}`;
-    })
-    .then((result) => {
-      emotion = result.emotion;
-      console.log(emotion);
-    });
 };
 
 const runP5 = async () => {
@@ -224,7 +254,7 @@ const geneQrcode = () => {
     })
     .then((result) => {
       const url = `https://drive.google.com/file/d/${result.fileId}/view?usp=sharing`;
-      console.log(url);
+      // console.log(url);
       new QRCode("qrcode", {
         text: url,
         width: 100,
@@ -239,14 +269,14 @@ const geneQrcode = () => {
 
 //record audio function
 function startRecording() {
-  __log("startRecording() called");
+  // __log("startRecording() called");
   var constraints = { audio: true, video: false };
   navigator.mediaDevices
     .getUserMedia(constraints)
     .then(function (stream) {
-      __log(
-        "getUserMedia() success, stream created, initializing WebAudioRecorder..."
-      );
+      // __log(
+      //   "getUserMedia() success, stream created, initializing WebAudioRecorder..."
+      // );
       audioContext = new AudioContext();
 
       gumStream = stream;
@@ -258,14 +288,14 @@ function startRecording() {
         encoding: encodingType,
         numChannels: 2, //2 is the default, wav encoding supports only 2
         onEncoderLoading: function (recorder, encoding) {
-          __log("Loading " + encoding + " encoder...");
+          // __log("Loading " + encoding + " encoder...");
         },
         onEncoderLoaded: function (recorder, encoding) {
-          __log(encoding + " encoder loaded");
+          // __log(encoding + " encoder loaded");
         },
       });
       recorder.onComplete = function (recorder, blob) {
-        __log("Encoding complete");
+        // __log("Encoding complete");
         audio.data = blob;
         createDownloadLink(blob, recorder.encoding);
       };
@@ -276,7 +306,7 @@ function startRecording() {
         wav: { bitRate: 160 },
       });
       recorder.startRecording();
-      __log("Recording started");
+      // __log("Recording started");
     })
     .catch(function (err) {
       recordButton.disabled = false;
@@ -285,10 +315,10 @@ function startRecording() {
 }
 
 function stopRecording() {
-  __log("stopRecording() called");
+  // __log("stopRecording() called");
   gumStream.getAudioTracks()[0].stop();
   recorder.finishRecording();
-  __log("Recording stopped");
+  // __log("Recording stopped");
 }
 
 function createDownloadLink(blob, encoding) {

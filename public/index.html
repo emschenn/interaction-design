@@ -33,47 +33,56 @@
 
   <body>
     <div class="ui container">
-      <div id="recorder" class="rec"></div>
+      <div class="ui two column stackable grid">
+        <div class="left column">
+          <div class="content">
+            <div class="title">
+              <img src="img/pablo-title.png" />
+              <div id="recorder" class="rec"></div>
+            </div>
+            <div class="description text">
+              我們經常用攝影記錄生活，卻很少用聲音捕捉回憶。
+              記憶裡那段時空的聲音是什麼樣子？甚至是，那段聲音如果讓其他人/物件來聽，他/它會有什麼畫面？我們看到他者描繪出來的畫面，又會對我們的記憶有什麼影響？...
+            </div>
 
-      <div class="button" id="startButton"><em>Click Here </em> to try!</div>
-      <div id="description">
-        Pablo會在這一分鐘內隨機錄製15秒的聲音、並生成圖像
-      </div>
-      <div id="placeholder">
-        <div class="play">
-          <img src="img/placeholder.png" />
-          <img class="on-hover" src="img/placeholder-top2.png" />
-        </div>
-        <div class="choose-style" style="display: none">
-          <img src="img/placeholder-style.png" />
-          <div id="style1" class="style">circle</div>
-          <div id="style2" class="style">spiral</div>
-          <div id="style3" class="style">block</div>
-        </div>
-      </div>
-
-      <div class="button" id="resetButton">Try <em>again!</em></div>
-      <div class="button" id="replayButton"><em>Replay</em></div>
-      <div class="button" id="progressBar"><div id="counter"></div></div>
-
-      <div id="canva">
-        <div id="p5"></div>
-        <div id="date"></div>
-        <div id="qrcode"></div>
-      </div>
-      <div id="print">Save the image<img src="img/pablo.png" /></div>
-      <div class="ui modal" id="modal">
-        <i class="close icon"></i>
-        <div class="image content">
-          <!--div class="image"></div-->
-
-          <div class="description">
-            如果想要收藏這張聲音照片，請點擊下方按鈕。
-            <br /><br />系統會將這張照片上傳至雲端，<br />再交由團隊人員用Pablo將照片列印出來。
+            <div class="button dark" id="startButton">
+              <em>Click Here </em> to try!
+            </div>
+            <div class="button dark resetButton">Try <em>again!</em></div>
+            <div class="button light replayButton"><em>Replay</em></div>
+            <div id="hint" class="text">
+              Pablo會隨機錄製15秒的聲音、並生成圖像
+            </div>
+            <div class="button" id="progressBar"><div id="counter"></div></div>
           </div>
-          <div class="botton" id="uploadImage"><em>Upload</em> Img</div>
-
-          <img src="img/pablo-print.png" />
+        </div>
+        <div class="right column">
+          <div id="canva-container">
+            <div id="canva" class="canva-img">
+              <div id="placeholder" class="canva-img">
+                <img src="img/placeholder.png" />
+                <div class="on-hover">
+                  <img src="img/placeholder-top2.png" />
+                </div>
+                <div class="choose-style">
+                  <img src="img/placeholder-style.png" />
+                  <div id="style1" class="style">circle</div>
+                  <div id="style2" class="style">spiral</div>
+                  <div id="style3" class="style">block</div>
+                </div>
+              </div>
+              <div id="p5"></div>
+              <div id="date"></div>
+              <div id="qrcode"></div>
+            </div>
+          </div>
+          <div id="print" class="button light">
+            Save the image<img src="img/pablo.png" />
+          </div>
+          <div id="buttonList">
+            <div class="button dark resetButton">Try <em>again!</em></div>
+            <div class="button light replayButton"><em>Replay</em></div>
+          </div>
         </div>
       </div>
     </div>

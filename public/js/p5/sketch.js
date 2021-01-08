@@ -8,9 +8,12 @@ let spectrum, level;
 // }
 
 function setup() {
-  var canvas = createCanvas(340, 340);
+  // var width = window.innerWidth > 0 ? window.innerWidth : screen.width;
+  if (width < 768) var canvas = createCanvas(width * 0.6, width * 0.6);
+  else var canvas = createCanvas(340, 340);
+
   canvas.parent("p5");
-  background(255);
+  background(0);
 
   fft = new p5.FFT();
   frameRate(30);
@@ -207,12 +210,17 @@ function draw() {
       drawSpectrum3();
     }
     if (replay == true) {
-      $("#print").hide();
+      $("#print").css({
+        visibility: "hidden",
+      });
       if (soundFile.isPlaying()) replay = false;
     } else if (!soundFile.isPlaying() && qrDone) {
       $("#print").fadeIn(1500);
-      $("#replayButton").fadeIn(1500);
-      $("#resetButton").fadeIn(1500);
+      $("#print").css({
+        visibility: "visible",
+      });
+      $(".replayButton").fadeIn(1500);
+      $(".resetButton").fadeIn(1500);
     }
     // console.log("Bass: "+bass+" lowMid: "+lowMid+" mid: "+mid+" highMid: "+highMid+" treble: "+treble);
   }
