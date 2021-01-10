@@ -335,18 +335,22 @@ body {
   }
 }
 .container .right.column #canva-container #canva #qrcode {
-  width: 100px;
-  height: 100px;
   position: relative;
   top: 110px;
   left: 265px;
 }
+.container .right.column #canva-container #canva #qrcode img {
+  width: 110px;
+  height: 110px;
+}
 @media (max-width: 768px) {
   .container .right.column #canva-container #canva #qrcode {
-    width: 17vw;
-    height: 17vw;
     top: 18vw;
     left: 48vw;
+  }
+  .container .right.column #canva-container #canva #qrcode img {
+    width: 17vw;
+    height: 17vw;
   }
 }
 .container .right.column #print {

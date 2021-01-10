@@ -310,15 +310,19 @@ body {
           }
         }
         #qrcode {
-          width: 100px;
-          height: 100px;
           // background-color: blue;
           position: relative;
           top: 110px;
           left: 265px;
+          img {
+            width: 110px;
+            height: 110px;
+          }
           @media (max-width: 768px) {
-            width: 17vw;
-            height: 17vw;
+            img {
+              width: 17vw;
+              height: 17vw;
+            }
             top: 18vw;
             left: 48vw;
           }
