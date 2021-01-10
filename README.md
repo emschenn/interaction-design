@@ -1,8 +1,8 @@
 # Pablo
 
-### [👉🏼 See the Demo](https://pablo-interaction-design.herokuapp.com/)
-or 
-### Run the project yourself
+ [**👉🏼 See the Demo**](https://pablo-interaction-design.herokuapp.com/) (only work on desktop)
+ 
+ or **Run the project yourself**
 ```=shell
 > npm install
 > node app.js
