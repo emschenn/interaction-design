@@ -75,6 +75,41 @@ upload-audio-google:
   - return share url
  *
  */
+function uploadImageToGoogle(req, res) {
+  let filename = req.body.image;
+  filename = filename.replace(".wav", ".jpeg");
+  console.log(filename);
+  const folderId = "1H66g3Z9AmuECBpa-8lRyj2VUnt7D6hIt";
+  const resource = {
+    name: filename,
+    parents: [folderId],
+  };
+  const media = {
+    mimeType: "image/jpeg",
+    body: fs.createReadStream(`./public/saved_image/${filename}`),
+  };
+  fs.readFile(CREDENTIALS_PATH, (err, content) => {
+    if (err) return res.status(400).send(err);
+    authorize(JSON.parse(content), resource, media, res);
+  });
+}
+
+function uploadAudioToGoogle(req, res) {
+  const filename = req.body.audio;
+  const folderId = "1nrgBh7j_yUvGdZyDxSUNzqoq0XpjAI4_";
+  const resource = {
+    name: filename,
+    parents: [folderId],
+  };
+  const media = {
+    mimeType: "audio/mpeg",
+    body: fs.createReadStream(`./public/saved_audio/${filename}`),
+  };
+  fs.readFile(CREDENTIALS_PATH, (err, content) => {
+    if (err) return res.status(400).send(err);
+    authorize(JSON.parse(content), resource, media, res);
+  });
+}
 
 function authorize(credentials, resource, media, res) {
   const { client_secret, client_id, redirect_uris } = credentials.installed;
