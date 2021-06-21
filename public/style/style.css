@@ -2,10 +2,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400&display=swap");
 body {
   margin: 0;
-  height: 100vh;
   font-family: "Noto Sans TC", sans-serif;
   font-style: normal;
-  overflow: hidden;
 }
 
 .ui.dimmer {
@@ -402,6 +400,320 @@ body {
   .container .right.column #buttonList .resetButton {
     display: none !important;
   }
+}
+
+section {
+  width: 100vw;
+  height: 100vh;
+}
+@media (min-width: 1024px) {
+  section {
+    width: 80vw;
+    margin: auto;
+  }
+}
+@media (min-width: 1600px) {
+  section {
+    width: 60vw;
+    margin: auto;
+  }
+}
+
+.main {
+  background-color: #fff;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.main img {
+  width: 200px;
+  height: 100%;
+}
+@media (min-width: 500px) {
+  .main {
+    padding: 10rem;
+  }
+}
+@media (min-width: 800px) {
+  .main {
+    flex-direction: row;
+  }
+  .main .intro {
+    padding-right: 5rem;
+  }
+}
+
+.gallery {
+  height: 20vh;
+  background-color: #8c8b81;
+}
+
+.playground {
+  background-color: #ccc;
+}
+.playground #canva-container {
+  width: 400px;
+  height: 608px;
+  left: 652px;
+  top: 146px;
+  background: #ffffff;
+  box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.25);
+}
+@media (max-width: 768px) {
+  .playground #canva-container {
+    margin: auto;
+    margin-top: 6vh;
+    width: 70vw;
+    height: 105vw;
+  }
+}
+.playground #canva-container #canva {
+  width: 100%;
+  height: 100%;
+}
+.playground #canva-container #canva #placeholder {
+  z-index: 0;
+  vertical-align: top;
+  position: relative;
+  width: 100%;
+}
+.playground #canva-container #canva #placeholder img {
+  width: 100%;
+}
+.playground #canva-container #canva #placeholder .on-hover {
+  position: absolute;
+  top: 0;
+  display: none;
+  z-index: 2;
+}
+.playground #canva-container #canva #placeholder:hover .on-hover {
+  display: block;
+}
+.playground #canva-container #canva #placeholder .choose-style {
+  display: none;
+  position: absolute;
+  top: 0;
+  z-index: 2;
+}
+.playground #canva-container #canva #placeholder .choose-style .style {
+  position: absolute;
+  top: 360px;
+  width: 90px;
+  height: 90px;
+  border-radius: 5px;
+  background-color: #e2e1df;
+  z-index: 100;
+  text-align: center;
+  color: white;
+  line-height: 90px;
+  font-family: "Lato", sans-serif;
+  font-size: 24px;
+  font-weight: 300;
+  cursor: pointer;
+}
+@media (max-width: 768px) {
+  .playground #canva-container #canva #placeholder .choose-style .style {
+    width: 16vw;
+    height: 16vw;
+    top: 62vw;
+  }
+}
+.playground #canva-container #canva #placeholder .choose-style .style#style1 {
+  left: 45px;
+}
+.playground #canva-container #canva #placeholder .choose-style .style#style1:hover {
+  color: rgba(0, 0, 0, 0);
+  background-image: url("../img/style1.png");
+  background-size: 90px;
+}
+@media (max-width: 768px) {
+  .playground #canva-container #canva #placeholder .choose-style .style#style1 {
+    color: #8c8b81;
+    font-size: 16px;
+    left: 7vw;
+    background-image: url("../img/style1.png");
+    background-size: 16vw;
+  }
+}
+.playground #canva-container #canva #placeholder .choose-style .style#style2 {
+  left: 155px;
+}
+.playground #canva-container #canva #placeholder .choose-style .style#style2:hover {
+  color: rgba(0, 0, 0, 0);
+  background-image: url("../img/style2.png");
+  background-size: 90px;
+}
+@media (max-width: 768px) {
+  .playground #canva-container #canva #placeholder .choose-style .style#style2 {
+    color: #8c8b81;
+    font-size: 16px;
+    left: 27vw;
+    background-image: url("../img/style2.png");
+    background-size: 16vw;
+  }
+}
+.playground #canva-container #canva #placeholder .choose-style .style#style3 {
+  left: 265px;
+}
+.playground #canva-container #canva #placeholder .choose-style .style#style3:hover {
+  color: rgba(0, 0, 0, 0);
+  background-image: url("../img/style3.png");
+  background-size: 90px;
+}
+@media (max-width: 768px) {
+  .playground #canva-container #canva #placeholder .choose-style .style#style3 {
+    color: #8c8b81;
+    font-size: 16px;
+    left: 47vw;
+    background-image: url("../img/style3.png");
+    background-size: 16vw;
+  }
+}
+.playground #canva-container #canva #p5 {
+  vertical-align: top;
+  position: relative;
+  top: 27.5px;
+  left: 27.7px;
+}
+@media (max-width: 768px) {
+  .playground #canva-container #canva #p5 {
+    top: 5vw;
+    left: 5vw;
+  }
+}
+.playground #canva-container #canva #date {
+  font-size: 16px;
+  top: 100px;
+  position: relative;
+  left: 280px;
+}
+@media (max-width: 768px) {
+  .playground #canva-container #canva #date {
+    font-size: 12px;
+    top: 17vw;
+    left: 48vw;
+  }
+}
+.playground #canva-container #canva #qrcode {
+  position: relative;
+  top: 110px;
+  left: 265px;
+}
+.playground #canva-container #canva #qrcode img {
+  width: 110px;
+  height: 110px;
+}
+@media (max-width: 768px) {
+  .playground #canva-container #canva #qrcode {
+    top: 18vw;
+    left: 48vw;
+  }
+  .playground #canva-container #canva #qrcode img {
+    width: 17vw;
+    height: 17vw;
+  }
+}
+.playground #print {
+  cursor: pointer;
+  height: 36px;
+  font-size: 16px;
+  width: 140px;
+  line-height: 34px;
+  padding: 0;
+  margin: 22px 240px;
+}
+@media (max-width: 768px) {
+  .playground #print {
+    margin: auto;
+    margin-top: 5vw;
+    font-size: 18px;
+    height: 45px;
+    line-height: 45px;
+    width: 55vw;
+    font-weight: 300;
+  }
+}
+.playground #print img {
+  display: none;
+  width: 33px;
+  position: absolute;
+  left: 68px;
+  top: 0px;
+}
+.playground #buttonList {
+  display: flex;
+  margin-top: 10vw;
+  justify-content: center;
+}
+.playground #buttonList .replayButton {
+  width: 29vw;
+  margin: 0 2vw;
+}
+@media (min-width: 768px) {
+  .playground #buttonList .replayButton {
+    display: none !important;
+  }
+}
+.playground #buttonList .resetButton {
+  width: 37vw;
+  margin: 0 2vw;
+}
+@media (min-width: 768px) {
+  .playground #buttonList .resetButton {
+    display: none !important;
+  }
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-20vh * 10));
+  }
+}
+.slider {
+  background: #fff;
+  margin: auto;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.slider::before, .slider::after {
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 50%);
+  content: "";
+  height: 100%;
+  position: absolute;
+  width: 200px;
+  z-index: 2;
+}
+.slider::after {
+  right: 0;
+  top: 0;
+  transform: rotateZ(180deg);
+}
+.slider::before {
+  left: 0;
+  top: 0;
+}
+.slider .slide-track {
+  animation: scroll 60s linear infinite;
+  display: flex;
+  width: calc(20vh * 20);
+}
+.slider .slide {
+  height: 20vh;
+  width: 20vh;
+  padding: 0 1rem;
+}
+.slider .slide img {
+  width: 100%;
+  cursor: pointer;
 }
 
 /*# sourceMappingURL=style.css.map */
