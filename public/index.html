@@ -122,91 +122,50 @@
       </div>
     </section>
     <section class="playground">
-      <div class="button dark resetButton">Try <em>again!</em></div>
-      <div class="button light replayButton"><em>Replay</em></div>
-      <div id="hint" class="text">Pablo會隨機錄製15秒的聲音、並生成圖像</div>
-      <div class="button" id="progressBar"><div id="counter"></div></div>
-      <div id="canva-container">
-        <div id="canva" class="canva-img">
-          <div id="placeholder" class="canva-img">
-            <img src="img/placeholder.png" />
-            <div class="on-hover">
-              <img src="img/placeholder-top2.png" />
-            </div>
-            <div class="choose-style">
-              <img src="img/placeholder-style.png" />
-              <div id="style1" class="style">circle</div>
-              <div id="style2" class="style">spiral</div>
-              <div id="style3" class="style">block</div>
-            </div>
+      <div class="record">
+        <p class="hint">
+          Pablo will randomly record sound in the certain interval and generate
+          the picture card
+        </p>
+        <div class="start-button">TRY</div>
+      </div>
+      <div class="style">
+        <ul>
+          PATTERN
+          <li class="select circle" value="1">circle</li>
+          <li class="spiral" value="2">spiral</li>
+          <li class="block" value="3">block</li>
+        </ul>
+      </div>
+      <div class="print">
+        <div class="canva-container">
+          <div class="canva">
+            <!-- <div id="placeholder" class="canva-img">
+              <img src="img/placeholder.png" />
+              <div class="on-hover">
+                <img src="img/placeholder-top2.png" />
+              </div>
+              <div class="choose-style">
+                <img src="img/placeholder-style.png" />
+                <div id="style1" class="style">circle</div>
+                <div id="style2" class="style">spiral</div>
+                <div id="style3" class="style">block</div>
+              </div>
+            </div> -->
+            <div id="p5"></div>
+            <div id="date"></div>
+            <div id="qrcode"></div>
           </div>
-          <div id="p5"></div>
-          <div id="date"></div>
-          <div id="qrcode"></div>
         </div>
       </div>
     </section>
-    <!-- <div class="ui container">
-      <div class="ui two column stackable grid">
-        <div class="left column">
-          <div class="content">
-            <div class="title">
-              <div id="recorder" class="rec"></div>
-            </div>
-            <div class="description text">
-              我們經常用攝影記錄生活，卻很少用聲音捕捉回憶。
-              記憶裡那段時空的聲音是什麼樣子？甚至是，那段聲音如果讓其他人/物件來聽，他/它會有什麼畫面？我們看到他者描繪出來的畫面，又會對我們的記憶有什麼影響？...
-            </div>
-
-            <div class="button dark" id="startButton">
-              <em>Click Here </em> to try!
-            </div>
-            <div class="button dark resetButton">Try <em>again!</em></div>
-            <div class="button light replayButton"><em>Replay</em></div>
-            <div id="hint" class="text">
-              Pablo會隨機錄製15秒的聲音、並生成圖像
-            </div>
-            <div class="button" id="progressBar"><div id="counter"></div></div>
-          </div>
-        </div>
-        <div class="right column">
-          <div id="canva-container">
-            <div id="canva" class="canva-img">
-              <div id="placeholder" class="canva-img">
-                <img src="img/placeholder.png" />
-                <div class="on-hover">
-                  <img src="img/placeholder-top2.png" />
-                </div>
-                <div class="choose-style">
-                  <img src="img/placeholder-style.png" />
-                  <div id="style1" class="style">circle</div>
-                  <div id="style2" class="style">spiral</div>
-                  <div id="style3" class="style">block</div>
-                </div>
-              </div>
-              <div id="p5"></div>
-              <div id="date"></div>
-              <div id="qrcode"></div>
-            </div>
-          </div>
-          <div id="print" class="button light">
-            Save the image<img src="img/pablo.png" />
-          </div>
-          <div id="buttonList">
-            <div class="button dark resetButton">Try <em>again!</em></div>
-            <div class="button light replayButton"><em>Replay</em></div>
-          </div>
-        </div>
-      </div>
-    </div> -->
-
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"
       integrity="sha512-dqw6X88iGgZlTsONxZK9ePmJEFrmHwpuMrsUChjAw1mRUhUITE5QU9pkcSox+ynfLhL15Sv2al5A0LVyDCmtUw=="
       crossorigin="anonymous"
     ></script>
-    <!-- <script src="js/recorder/WebAudioRecorder.min.js"></script>
+    <script src="js/recorder/WebAudioRecorder.min.js"></script>
     <script src="js/index.js"></script>
-    <script src="js/p5/sketch.js"></script> -->
+    <script src="js/p5/sketch.js"></script>
   </body>
 </html>

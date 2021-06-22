@@ -20,25 +20,22 @@ const app = express();
 app.use(express.static("public"));
 app.use(express.json({ limit: "50mb" }));
 
+app.post("/upload-audio-google", uploadAudioToGoogle);
+
 app.get("/get-emotion", pythonProcess);
 
 app.post("/save-audio", upload.single("soundBlob"), function (req, res, next) {
-  var bufStream = new stream.PassThrough(); // Added
-  bufStream.end(req.file.buffer);
-  const folderId = "1nrgBh7j_yUvGdZyDxSUNzqoq0XpjAI4_";
-  const resource = {
-    name: req.file.originalname,
-    parents: [folderId],
-  };
-  const media = {
-    mimeType: "audio/mpeg",
-    body: bufStream,
-  };
-
-  fs.readFile(CREDENTIALS_PATH, (err, content) => {
-    if (err) return res.status(400).send(err);
-    authorize(JSON.parse(content), resource, media, res);
-  });
+  //console.log(req.file); // see what got uploaded
+  let uploadLocation = __dirname + SAVED_AUDIO_PATH + req.file.originalname; // where to save the file to. make sure the incoming name has a .wav extension
+  try {
+    fs.writeFileSync(
+      uploadLocation,
+      Buffer.from(new Uint8Array(req.file.buffer))
+    );
+  } catch (err) {
+    console.error(err);
+  }
+  res.sendStatus(200);
 });
 
 const PORT = process.env.PORT || 3000;

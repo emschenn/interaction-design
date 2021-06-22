@@ -1,33 +1,18 @@
 let song, buttton, fft, space_between_lines;
 
 let bass, lowMid, mid, highMid, treble;
-let mic, p5recorder, soundFile;
 let spectrum, level;
 // function preload() {
 //   s = loadSound("./saved_audio/1.m4a");
 // }
 
 function setup() {
-  // var width = window.innerWidth > 0 ? window.innerWidth : screen.width;
-  if (width < 768) var canvas = createCanvas(width * 0.6, width * 0.6);
-  else var canvas = createCanvas(340, 340);
-
+  var canvas = createCanvas(340, 340);
   canvas.parent("p5");
-  background(0);
+  background(255);
 
   fft = new p5.FFT();
   frameRate(30);
-
-  mic = new p5.AudioIn();
-  // prompts user to enable their browser mic
-  mic.start();
-  // create a sound recorder
-  p5recorder = new p5.SoundRecorder();
-  // connect the mic to the recorder
-  p5recorder.setInput(mic);
-  // this sound file will be used to
-  // playback & save the recording
-  soundFile = new p5.SoundFile();
 }
 
 function drawSpectrum() {
@@ -104,125 +89,109 @@ function drawSpectrum3() {
   }
 }
 function draw() {
-  // background(255)
-  if (flag) {
-    if (style == 1) {
-      bass = fft.getEnergy("bass");
-      lowMid = fft.getEnergy("lowMid");
-      mid = fft.getEnergy("mid");
-      highMid = fft.getEnergy("highMid");
-      treble = fft.getEnergy("treble");
-      let bins = [bass, lowMid, mid, highMid, treble];
-      noStroke();
-      translate(width / 2, height / 2);
-      translate(random(-700, 700), random(-700, 700));
-      rotate(frameCount / 76);
+  if (!flag) return;
+  if (replay) {
+    replay = false;
+  }
+  if (style == 1) {
+    bass = fft.getEnergy("bass");
+    lowMid = fft.getEnergy("lowMid");
+    mid = fft.getEnergy("mid");
+    highMid = fft.getEnergy("highMid");
+    treble = fft.getEnergy("treble");
+    let bins = [bass, lowMid, mid, highMid, treble];
+    noStroke();
+    translate(width / 2, height / 2);
+    translate(random(-700, 700), random(-700, 700));
+    rotate(frameCount / 76);
+    if (bins[0] / 2.4 + bins[1] / 1.4 > bins[3] + bins[4] + bins[2] / 2) {
+      scale((lowMid / 110) * random(0.28, 0.8) + bass / 450);
+      fill(0, lerp(mid * 2.4, lowMid, 0.7), bass * 2.2 * random(0.5, 1.2));
+    } else {
+      scale(treble / 60 + highMid / 800 + random(0.1, 0.5));
+      fill(
+        treble * random(1, 4) + highMid * random(1, 1.5),
+        255 - mid * random(0.2, 3),
+        0
+      );
+    }
+    drawSpectrum1();
+  } else if (style == 2) {
+    fill(0);
+    noStroke();
+    translate(width / 2, height / 2);
+    rotate(frameCount / 50);
+    drawSpectrum2();
+  } else if (style == 3) {
+    bass = fft.getEnergy("bass");
+    lowMid = fft.getEnergy("lowMid");
+    mid = fft.getEnergy("mid");
+    highMid = fft.getEnergy("highMid");
+    treble = fft.getEnergy("treble");
+    let bins = [bass, lowMid, mid, highMid, treble];
+    noStroke();
+    translate(width / 2, height / 2);
+    translate(random(-700, 700), random(-700, 700));
+    // calm happy fearful disgust四種模式
+    const randomColor = Math.floor(Math.random() * 4);
+    if (randomColor === 0) {
       if (bins[0] / 2.4 + bins[1] / 1.4 > bins[3] + bins[4] + bins[2] / 2) {
-        scale((lowMid / 110) * random(0.28, 0.8) + bass / 450);
-        fill(0, lerp(mid * 2.4, lowMid, 0.7), bass * 2.2 * random(0.5, 1.2));
-      } else {
-        scale(treble / 60 + highMid / 800 + random(0.1, 0.5));
+        scale((lowMid / 140) * random(0.2, 0.8) + bass / 500);
         fill(
-          treble * random(1, 4) + highMid * random(1, 1.5),
-          255 - mid * random(0.2, 3),
+          lowMid + mid * random(1, 1.5),
+          random(100, 255),
+          255 - bass / 4 - random(100, 200)
+        );
+      } else {
+        scale(treble / 30 + highMid / 550 + random(0.4, 0.75));
+        fill(
+          highMid * random(2, 4) + treble * random(4, 12),
+          lowMid * random(0.1, 0.5) + treble * random(1.5, 8),
           0
         );
       }
-      drawSpectrum1();
-    } else if (style == 2) {
-      fill(0);
-      noStroke();
-      translate(width / 2, height / 2);
-      rotate(frameCount / 50);
-      drawSpectrum2();
-    } else if (style == 3) {
-      bass = fft.getEnergy("bass");
-      lowMid = fft.getEnergy("lowMid");
-      mid = fft.getEnergy("mid");
-      highMid = fft.getEnergy("highMid");
-      treble = fft.getEnergy("treble");
-      let bins = [bass, lowMid, mid, highMid, treble];
-      noStroke();
-      translate(width / 2, height / 2);
-      translate(random(-700, 700), random(-700, 700));
-      // calm happy fearful disgust四種模式
-      if (emotion == "happy") {
-        if (bins[0] / 2.4 + bins[1] / 1.4 > bins[3] + bins[4] + bins[2] / 2) {
-          scale((lowMid / 140) * random(0.2, 0.8) + bass / 500);
-          fill(
-            lowMid + mid * random(1, 1.5),
-            random(100, 255),
-            255 - bass / 4 - random(100, 200)
-          );
-        } else {
-          scale(treble / 30 + highMid / 550 + random(0.4, 0.75));
-          fill(
-            highMid * random(2, 4) + treble * random(4, 12),
-            lowMid * random(0.1, 0.5) + treble * random(1.5, 8),
-            0
-          );
-        }
+    } else if (randomColor === 1) {
+      if (bins[0] / 2.4 + bins[1] / 1.4 > bins[3] + bins[4] + bins[2] / 2) {
+        scale((lowMid / 100) * random(0.2, 0.8) + bass / 500);
+        fill(
+          lowMid * random(1, 5),
+          bass * random(0.6, 1.5) + lowMid / 2,
+          highMid * random(1, 1.5) + bass
+        );
+      } else {
+        scale(treble / 30 + highMid / 550 + random(0.3, 0.75));
+        fill(
+          treble * random(highMid / treble, (mid * 1.5) / treble),
+          treble * random(2, 10),
+          150 + highMid * random(1, 1.5)
+        );
       }
-      if (emotion == "disgust") {
-        if (bins[0] / 2.4 + bins[1] / 1.4 > bins[3] + bins[4] + bins[2] / 2) {
-          scale((lowMid / 100) * random(0.2, 0.8) + bass / 500);
-          fill(
-            lowMid * random(1, 5),
-            bass * random(0.6, 1.5) + lowMid / 2,
-            highMid * random(1, 1.5) + bass
-          );
-        } else {
-          scale(treble / 30 + highMid / 550 + random(0.3, 0.75));
-          fill(
-            treble * random(highMid / treble, (mid * 1.5) / treble),
-            treble * random(2, 10),
-            150 + highMid * random(1, 1.5)
-          );
-        }
+    } else if (randomColor === 2) {
+      if (bins[0] / 2.4 + bins[1] / 1.4 > bins[3] + bins[4] + bins[2] / 2) {
+        scale((lowMid / 100) * random(0.2, 0.8) + bass / 500);
+        fill(0, lerp(mid * 2, lowMid, 0.7), bass * 2 * random(0.5, 1.5));
+      } else {
+        scale(treble / 30 + highMid / 450 + random(0.3, 0.85));
+        fill(
+          0,
+          mid * random(1, 1.6) + highMid * random(1, 1.5),
+          lerp(mid * 2, lowMid, 0.7)
+        );
       }
-      if (emotion == "calm") {
-        if (bins[0] / 2.4 + bins[1] / 1.4 > bins[3] + bins[4] + bins[2] / 2) {
-          scale((lowMid / 100) * random(0.2, 0.8) + bass / 500);
-          fill(0, lerp(mid * 2, lowMid, 0.7), bass * 2 * random(0.5, 1.5));
-        } else {
-          scale(treble / 30 + highMid / 450 + random(0.3, 0.85));
-          fill(
-            0,
-            mid * random(1, 1.6) + highMid * random(1, 1.5),
-            lerp(mid * 2, lowMid, 0.7)
-          );
-        }
+    } else if (randomColor === 3) {
+      if (bins[0] / 2.4 + bins[1] / 1.4 > bins[3] + bins[4] + bins[2] / 2) {
+        scale((lowMid / 120) * random(0.1, 0.8) + bass / 500);
+        fill(0, lerp(mid, lowMid, random(0.7, 0.9)), random(0, 100));
+      } else {
+        scale(treble / 50 + highMid / 4000 + random(0.2, 0.6));
+        fill(
+          random(50, 100),
+          treble * random(1, 5),
+          255 - mid * random(1, 2) + highMid * random(1, 2)
+        );
       }
-      if (emotion == "fearful") {
-        if (bins[0] / 2.4 + bins[1] / 1.4 > bins[3] + bins[4] + bins[2] / 2) {
-          scale((lowMid / 120) * random(0.1, 0.8) + bass / 500);
-          fill(0, lerp(mid, lowMid, random(0.7, 0.9)), random(0, 100));
-        } else {
-          scale(treble / 50 + highMid / 4000 + random(0.2, 0.6));
-          fill(
-            random(50, 100),
-            treble * random(1, 5),
-            255 - mid * random(1, 2) + highMid * random(1, 2)
-          );
-        }
-      }
-
-      drawSpectrum3();
     }
-    if (replay == true) {
-      $("#print").css({
-        visibility: "hidden",
-      });
-      if (soundFile.isPlaying()) replay = false;
-    } else if (!soundFile.isPlaying() && qrDone) {
-      $("#print").fadeIn(1500);
-      $("#print").css({
-        visibility: "visible",
-      });
-      $(".replayButton").fadeIn(1500);
-      $(".resetButton").fadeIn(1500);
-    }
-    // console.log("Bass: "+bass+" lowMid: "+lowMid+" mid: "+mid+" highMid: "+highMid+" treble: "+treble);
+    drawSpectrum3();
   }
 }
 
