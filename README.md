@@ -5,7 +5,7 @@ We found that Pablo encourages the users to reflect on their memories in differe
 [👉🏼 see the whole research atricle](https://dl.acm.org/doi/10.1145/3450741.3466630)
 
 ## README
-This is a web for demonstrate the concept of Pablo.
+This is a web for demonstrate the concept of Pablo: Once the TRY button is pressed, It will randomly record in the certain time interval and generate the picture card of the sound 🖨
 
 ### 👷🏻‍♀️ Built with
 * [Express.js](https://expressjs.com/): node.js backend framework with multer for handling multipart/form-data 
