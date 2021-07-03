@@ -10,7 +10,6 @@ function setup() {
   var canvas = createCanvas(340, 340);
   canvas.parent("p5");
   background(255);
-
   fft = new p5.FFT();
   frameRate(30);
 }
@@ -192,6 +191,12 @@ function draw() {
       }
     }
     drawSpectrum3();
+  }
+  if (!s.isPlaying()) {
+    $("li").removeClass("disable");
+    $(".start-button").removeClass("disable");
+    $(".start-button").text("try\nagain");
+    flag = false;
   }
 }
 

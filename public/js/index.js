@@ -124,14 +124,14 @@ const clearCanvas = () => {
 
 $(".start-button").on("click", function () {
   if ($(this).hasClass("disable")) return;
-  clearCanvas();
-  if (state === 0) {
+  if (state === 0 || state === 2) {
+    clearCanvas();
     $(".start-button").text("recording...");
     randomRecording();
     replay = false;
   } else if (state === 1) {
     generate();
-    state = 0;
+    state = 2;
   }
 });
 
@@ -149,7 +149,7 @@ $("ul").on("click", "li", function () {
   } else if (style === 3) {
     pixelDensity(2);
   }
-  if (state == 1) {
+  if (state === 2) {
     replay = true;
     generate();
   }
@@ -158,30 +158,16 @@ $("ul").on("click", "li", function () {
 const runP5 = async () => {
   s = await new Promise((resolve, reject) => {
     new p5.SoundFile(
-      `saved_audio/2021-06-22T06_30_22.202Z.wav`,
-      (s) => {
-        resolve(s);
-        s.loop = false;
-        s.play();
-        console.log("start the song");
-        s.onended(sayDone);
-        flag = true;
-        $("li").addClass("disable");
-        $(".start-button").addClass("disable");
-      },
-      (err) => {
-        reject(err);
-        console.log(err);
-      }
+      `saved_audio/${audio.name}`,
+      (s) => resolve(s),
+      (err) => reject(err)
     );
   });
+  $("li").addClass("disable");
+  $(".start-button").addClass("disable");
+  s.play();
+  flag = true;
 };
-
-function sayDone(elt) {
-  $("li").removeClass("disable");
-  $(".start-button").removeClass("disable");
-  flag = false;
-}
 
 const geneQrcode = () => {
   const data = { audio: audio.name };
@@ -206,6 +192,7 @@ const geneQrcode = () => {
       });
     })
     .then(() => {
+      $("#date").show();
       $("#qrcode").fadeIn(300);
       qrDone = true;
     });
@@ -240,10 +227,10 @@ function startRecording() {
       });
       recorder.onComplete = function (recorder, blob) {
         __log("Encoding complete");
-        state = 1;
-        $(".start-button").text("start");
         audio.data = blob;
         createDownloadLink(blob, recorder.encoding);
+        $(".start-button").text("start");
+        state = 1;
       };
       recorder.setOptions({
         timeLimit: 120,
@@ -293,6 +280,3 @@ function createDownloadLink(blob, encoding) {
 function __log(e, data) {
   console.log("\n" + e + " " + (data || ""));
 }
-
-//clientID 923508977284-9t191qu67stf4v17t0i1p82ftlh573bj.apps.googleusercontent.com
-//clientSecret CzUURSoMFb3BAFNBMpGFNVyG
